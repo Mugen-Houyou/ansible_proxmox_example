@@ -1,0 +1,18 @@
+- name: Upgrade OpenJDK version in Ubuntu containers
+  hosts: ubuntu_containers
+  become: yes
+  tasks:
+    - name: Remove OpenJDK 17
+      apt:
+        name: openjdk-17-jre
+        state: absent
+
+    - name: Install OpenJDK 21
+      apt:
+        name: openjdk-21-jre
+        state: present
+      register: installation
+
+    - name: Check OpenJDK 21 version
+      command: java --version
+      when: installation.changed
